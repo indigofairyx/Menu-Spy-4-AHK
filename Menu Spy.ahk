@@ -33,7 +33,7 @@ Last Updated: v.2025.01.16
 AHK v1
 OS: Win10
 forum post: https://www.autohotkey.com/boards/viewtopic.php?f=6&t=135218
-creator: https://github.com/indigofairyx
+creator: https://github.com/indigofairyx/Menu-Spy-4-AHK
 )
 
 ;; dark mode menu options
