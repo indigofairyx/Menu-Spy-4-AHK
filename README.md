@@ -14,7 +14,7 @@ Click or tap menu # to place the displayed values on your clipboard, e.g....
 >
 > 2 ahk_class Notepad++w
 >
-> 3 *C:\Users\%UserProfile%\Documents\AutoHotkey\menu spy.ahk - Notepad++
+> 3 *C:\Users\<UserProfile>\Documents\AutoHotkey\menu spy.ahk - Notepad++
 >
 > 4 Win Get Text & All Details *This item uses WinGetText to copy all available text, (if any), with all other details from this menu in the heading. Use with caution, in some editors, such as np++, it will copy an entire document if that control is under the mouse.*
 >
