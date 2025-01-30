@@ -1,4 +1,4 @@
-﻿#Requires AutoHotkey v1.1.+
+#Requires AutoHotkey v1.1.+
 about =
 (
 About: Menu Spy.ahk
@@ -26,14 +26,16 @@ Click or tap menu # to place the displayed values on your clipboard, e.g.
 9 will run AHKs proper window spy
 -------------------------
 also Close menu, Reload, Run as Admin and Exit script options
+-------------------------
+Made and added a sub menu populated with AHK Built in Variables.
 
 Source Info:
 Release Date: v.2025.01.08
-Last Updated: v.2025.01.16
+Last Updated: v.2025.01.30
 AHK v1
 OS: Win10
 forum post: https://www.autohotkey.com/boards/viewtopic.php?f=6&t=135218
-creator: https://github.com/indigofairyx/Menu-Spy-4-AHK
+creator: https://github.com/indigofairyx
 )
 
 ;; dark mode menu options
@@ -64,6 +66,7 @@ WinGetClass, winClass, A
     if ErrorLevel
 		{
 		gosub menuspy ; long press\hold
+		; gosub varmenu
 		menu, spy, show
 		}
     else
@@ -91,15 +94,16 @@ return
 ;--------------------------------------------------
 
 menuspy:
+gosub varmenu
 MouseGetPos, , , id, control
 WinGetClass, actwin, A
 WinGetTitle, title, ahk_id %id%
 WinGetClass, class, ahk_id %id%
 WinGet, activeProcess, ProcessName, ahk_id %id%
-winget, path, ProcessPath, ahk_id %id%
+winget, AppPath, ProcessPath, ahk_id %id%
 CoordMode, Mouse, Window
 MouseGetPos,xw,yw
-splitpath, path, filename, dir
+splitpath, AppPath, filename, dir
 menu, spy, add
 menu, spy, deleteall
 Menu, spy, add, < --- Menu Spy --- >     Click to Copy, showmenuspy ;;p=1
@@ -114,19 +118,19 @@ menu, spy, add, 1 ahk_exe %activeProcess%, copyspy ;;p=3
 if (path = "C:\Windows\System32\ApplicationFrameHost.exe")
 	menu, spy, icon, 1 ahk_exe %activeProcess%, C:\Windows\System32\@WLOGO_48x48.png
 else
-	menu, spy, icon, 1 ahk_exe %activeProcess%, %path%
+	menu, spy, icon, 1 ahk_exe %activeProcess%, %AppPath%
 	
 menu, spy, add, 2 ahk_class %class%, copyspy ;;p=4
 if (path = "C:\Windows\System32\ApplicationFrameHost.exe")
 	menu, spy, icon, 2 ahk_class %class%, C:\Windows\System32\@WLOGO_48x48.png
 else
-	menu, spy, icon, 2 ahk_class %class%, %path%
+	menu, spy, icon, 2 ahk_class %class%, %AppPath%
 	
 menu, spy, add, 3 WinTitle=  %title%, copyspy ;;p=5
 if (path = "C:\Windows\System32\ApplicationFrameHost.exe")
 	menu, spy, icon, 3 WinTitle=  %title%, C:\Windows\System32\@WLOGO_48x48.png
 else
-	menu, spy, icon, 3 WinTitle=  %title%, %path%
+	menu, spy, icon, 3 WinTitle=  %title%, %AppPath%
 	
 menu, spy, add, 4 Win Get Text && All Details, copyspy ;;p=6
 menu, spy, icon, 4 Win Get Text && All Details, C:\Windows\System32\shell32.dll, 261 ; clipboard icon
@@ -135,8 +139,8 @@ menu, spy, icon, 5 Control Under Mouse=  %control%, C:\Windows\System32\accessib
 menu, spy, add, 6 MouseCoord to Active Window**=  x%xw%`, y%yw%, copyspy ;;p=8
 ; menu, spy, icon, 6 MousePos to Window=  x%xw%`, y%yw%, C:\xsysicons\Fluent Colored icons\powertoys icons\Mouse Crosshairs_192x192.ico
 menu, spy, icon, 6 MouseCoord to Active Window**=  x%xw%`, y%yw%, C:\Windows\System32\shell32.dll, 160
-menu, spy, add, 7 .exe Path=  %path%, copyspy ;;p=9
-menu, spy, icon, 7 .exe Path=  %path%, C:\Windows\System32\shell32.dll, 5 ; folder icon
+menu, spy, add, 7 .exe Path=  %AppPath%, copyspy ;;p=9
+menu, spy, icon, 7 .exe Path=  %AppPath%, C:\Windows\System32\shell32.dll, 5 ; folder icon
 menu, spy, add, ; line ----------------------- ;;p=10
 menu, spy, add, 8 Open...   %filename%   ...Path, menuspyrunner ;;p=11
 if FileExist("C:\Program Files\GPSoftware\Directory Opus\dopus.exe")
@@ -148,6 +152,7 @@ if FileExist("C:\Program Files\AutoHotkey\UX\inc\spy.ico")
 	menu, spy, icon, 9 Run Window Spy, C:\Program Files\AutoHotkey\UX\inc\spy.ico
 else if Fileexist("C:\Program Files\AutoHotkey\AutoHotkey.exe")
 	menu, spy, icon, 9 Run Window Spy, autohotkey.exe,,24
+
 menu, spy, add, ; line------------------------- ;;p=13
 menu, spy, add, Close Menu, menuspyrunner ;;p=14
 menu, spy, icon, Close Menu, C:\Windows\System32\imageres.dll, 162
@@ -165,7 +170,10 @@ else
 	}
 
 menu, spy, add, ; line ------------------------- ;; ;; p=17
-menu, spy, add, Quit\Kill\Exit Menu Spy, menuspyrunner ;;p=18
+menu, spy, add, AHKs Built In `%A_Var`% Menu, :var ;; p=18
+menu, spy, icon, AHKs Built In `%A_Var`% Menu, %A_AHKPath%
+menu, spy, add, ; line ------------------------- ;; ;; p=19
+menu, spy, add, Quit\Kill\Exit Menu Spy, exit ;; p=20
 menu, spy, icon, Quit\Kill\Exit Menu Spy, C:\Windows\System32\imageres.dll, 230
 return
 
@@ -201,7 +209,7 @@ Unique ID: ahk_id %id%`r
 WinTitle:  %title%`r
 ahk_class %class%`r
 ahk_exe %activeProcess%`r
-Path:  %path%`r
+Path:  %AppPath%`r
 Control Under Mouse:  %control%`r
 Mosuse Position to Active Window:  x%xw%, y%yw%
 Win Get Text:`r
@@ -224,7 +232,7 @@ Else if (p=8)
 ;; renumber
 Else if (p=9)
 	{
-	clipboard = %path%
+	clipboard = %AppPath%
 	}
 return
 
@@ -233,9 +241,9 @@ p:=A_ThisMenuItemPos
 If (p=11)
 	{
 	if fileexist("C:\Program Files\GPSoftware\Directory Opus\dopusrt.exe")
-		Run, "C:\Program Files\GPSoftware\Directory Opus\dopusrt.exe" /cmd Go "%path%" NEWTAB TOFRONT
+		Run, "C:\Program Files\GPSoftware\Directory Opus\dopusrt.exe" /cmd Go "%AppPath%" NEWTAB TOFRONT
 	else
-		Run explorer.exe /select`,"%path%"
+		Run explorer.exe /select`,"%AppPath%"
 	}
 Else If (p=12)
 	run C:\Program Files\AutoHotkey\WindowSpy.ahk
@@ -245,8 +253,10 @@ Else if (p=15)
 	reload
 Else If (p=16)
 	goto runasadmin
-Else if (p=18)
-	exitapp
+return
+
+exit:
+exitapp
 return
 
 donothing:
@@ -270,4 +280,177 @@ If !A_IsAdmin {
 }
 Return
 
+varmenu:
+menu, var, add
+menu, var, deleteall
+menu, var, add, A_AHKs BUILT IN `%VARIABLES`% MENU, varhandle
+menu, var, icon, A_AHKs BUILT IN `%VARIABLES`% MENU, %A_AHKPath%
+menu, var, Default, A_AHKs BUILT IN `%VARIABLES`% MENU
+menu, var, add, ; line -------------------------
+
+menu, var1, add, A_AhkPath:   %A_AhkPath%, varhandle
+menu, var1, add, A_AhkVer:   %A_AhkVersion%, varhandle
+menu, var1, add, A_Args:   %A_Args%, varhandle
+menu, var1, add, A_ExitReason:   %A_ExitReason%, varhandle
+; menu, var1, add, IntWorkindDir:   %A_InitialWorkingDir%, varhandle ; causes error
+menu, var1, add, A_IsCompied:   %A_IsCompiled%, varhandle
+menu, var1, add, A_IsUnicode:   %A_IsUnicode%, varhandle
+menu, var1, add, A_Line#:   %A_LineNumber%, varhandle
+menu, var1, add, A_LineFile:   %A_LineFile%, varhandle
+menu, var1, add, A_ScriptDir:   %A_ScriptDir%, varhandle
+menu, var1, add, A_ScriptFullPath:   %A_ScriptFullPath%, varhandle
+menu, var1, add, A_ScriptHwnd:   %A_ScriptHwnd%, varhandle
+menu, var1, add, A_ScriptName:   %A_ScriptName%, varhandle
+menu, var1, add, A_ThisFucn:   %A_ThisFunc%, varhandle
+menu, var1, add, A_ThisLabel:   %A_ThisLabel%, varhandle
+menu, var1, add, A_Working Dir:   %A_WorkingDir%, varhandle
+menu, var, add,  SCRIPT PROPERTIES, :var1
+ 
+ menu, var, add, ; line -------------------------
+menu, var2, add, A_YYYY:   %A_YYYY%, varhandle
+menu, var2, add, A_MM:   %A_MM%, varhandle
+menu, var2, add, A_DD:   %A_DD%, varhandle
+menu, var2, add, A_MMMM:   %A_MMMM%, varhandle
+menu, var2, add, A_MMM:   %A_MMM%, varhandle
+menu, var2, add, A_DDDD:   %A_DDDD%, varhandle
+menu, var2, add, A_DDD:   %A_DDD%, varhandle
+menu, var2, add, A_WDay:   %A_WDay%, varhandle
+menu, var2, add, A_YDay:   %A_YDay%, varhandle
+menu, var2, add, A_YWeek:   %A_YWeek%, varhandle
+menu, var2, add, A_Hour:   %A_Hour%, varhandle
+menu, var2, add, A_Min:   %A_Min%, varhandle
+menu, var2, add, A_Sec:   %A_Sec%, varhandle
+menu, var2, add, A_MSec:   %A_MSec%, varhandle
+menu, var2, add, A_Now:   %A_Now%, varhandle
+menu, var2, add, A_NowUTC:   %A_NowUTC%, varhandle
+menu, var2, add, A_TickCount:   %A_TickCount%, varhandle
+menu, var, add, DATE && TIME, :var2
+;  Date and Time%, varhandle
+ menu, var, add, ; line -------------------------
+menu, var3, add, A_AutoTrim:   %A_AutoTrim%, varhandle
+menu, var3, add, A_BatchLines:   %A_BatchLines%, varhandle
+menu, var3, add, A_ControlDelay:   %A_ControlDelay%, varhandle
+menu, var3, add, A_CoordModePixel:   %A_CoordModePixel%, varhandle
+menu, var3, add, A_CordModeCaret:   %A_CoordModeCaret%, varhandle
+menu, var3, add, A_CordModeMenu:   %A_CoordModeMenu%, varhandle
+menu, var3, add, A_CordModeMouse:   %A_CoordModeMouse%, varhandle
+menu, var3, add, A_CordModeToolTip:   %A_CoordModeToolTip%, varhandle
+menu, var3, add, A_DefaultMouseSpeed:   %A_DefaultMouseSpeed%, varhandle
+menu, var3, add, A_DetectHiddenText:   %A_DetectHiddenText%, varhandle
+menu, var3, add, A_DetectHiddenWindows:   %A_DetectHiddenWindows%, varhandle
+menu, var3, add, A_FileEncoding:   %A_FileEncoding%, varhandle
+menu, var3, add, A_FormatFloat:   %A_FormatFloat%, varhandle
+menu, var3, add, A_FormatInteger:   %A_FormatInteger%, varhandle
+menu, var3, add, A_IconFile:   %A_IconFile%, varhandle
+menu, var3, add, A_IconHidden:   %A_IconHidden%, varhandle
+menu, var3, add, A_IconNumber:   %A_IconNumber%, varhandle
+menu, var3, add, A_IconTip:   %A_IconTip%, varhandle
+menu, var3, add, A_IsCritical:   %A_IsCritical%, varhandle
+menu, var3, add, A_IsPaused:   %A_IsPaused%, varhandle
+menu, var3, add, A_IsSuspended:   %A_IsSuspended%, varhandle
+menu, var3, add, A_KeyDelay:   %A_KeyDelay%, varhandle
+menu, var3, add, A_KeyDelayPlay:   %A_KeyDelayPlay%, varhandle
+menu, var3, add, A_KeyDuration:   %A_KeyDuration%, varhandle
+menu, var3, add, A_KeyDurationPlay:   %A_KeyDurationPlay%, varhandle
+menu, var3, add, A_ListLines:   %A_ListLines%, varhandle
+menu, var3, add, A_MouseDelay:   %A_MouseDelay%, varhandle
+menu, var3, add, A_MouseDelayPlay:   %A_MouseDelayPlay%, varhandle
+menu, var3, add, A_RegView:   %A_RegView%, varhandle
+menu, var3, add, A_SendLevel:   %A_SendLevel%, varhandle
+menu, var3, add, A_SendMode:   %A_SendMode%, varhandle
+menu, var3, add, A_StoreCapsLockMode:   %A_StoreCapsLockMode%, varhandle
+menu, var3, add, A_StringCaseSense:   %A_StringCaseSense%, varhandle
+menu, var3, add, A_TitleMatchMode:   %A_TitleMatchMode%, varhandle
+menu, var3, add, A_TitleMatchModeSpeed:   %A_TitleMatchModeSpeed%, varhandle
+menu, var3, add, A_WinDelay:   %A_WinDelay%, varhandle
+menu, var, add, SCRIPT SETTINGS, :var3
+menu, var, add, ; line -------------------------
+ 
+menu, var4, add, A_TimeIdle:   %A_TimeIdle%, varhandle
+menu, var4, add, A_TimeIdleKeyboard:   %A_TimeIdleKeyboard%, varhandle
+menu, var4, add, A_TimeIdlePhysical:   %A_TimeIdlePhysical%, varhandle
+menu, var4, add, A_TimeIdleMouse:   %A_TimeIdleMouse%, varhandle
+menu, var, add, User Idle Time, :var4
+
+
+ menu, var, add, ; line -------------------------
+menu, var5, add, A_EndChar:   %A_EndChar%, varhandle
+menu, var5, add, A_PriorHotkey:   %A_PriorHotkey%, varhandle
+menu, var5, add, A_PriorKey:   %A_PriorKey%, varhandle
+menu, var5, add, A_ThisHotkey:   %A_ThisHotkey%, varhandle
+menu, var5, add, A_ThisMenu:   %A_ThisMenu%, varhandle
+menu, var5, add, A_ThisMenuItem:   %A_ThisMenuItem%, varhandle
+menu, var5, add, A_ThisMenuItemPos:   %A_ThisMenuItemPos%, varhandle
+menu, var5, add, A_TimeSincePriorHotkey:   %A_TimeSincePriorHotkey%, varhandle
+menu, var5, add, A_TimeSinceThisHotkey:   %A_TimeSinceThisHotkey%, varhandle
+menu, var, add, Hotkeys`, Hotstrings`, and Custom Menu Items, :var5
+menu, var, add, ; line -------------------------
+ 
+menu, var6, add, A_AppData:   %A_AppData%, varhandle
+menu, var6, add, A_AppDataCommon:   %A_AppDataCommon%, varhandle
+menu, var6, add, A_ComputerName:   %A_ComputerName%, varhandle
+menu, var6, add, A_ComSpec:   %A_ComSpec%, varhandle
+menu, var6, add, A_Desktop:   %A_Desktop%, varhandle
+menu, var6, add, A_DesktopCommon:   %A_DesktopCommon%, varhandle
+menu, var6, add, A_Is64bitOS:   %A_Is64bitOS%, varhandle
+menu, var6, add, A_IsAdmin:   %A_IsAdmin%, varhandle
+menu, var6, add, A_Language:   %A_Language%, varhandle
+menu, var6, add, A_MyDocuments:   %A_MyDocuments%, varhandle
+menu, var6, add, A_OSType:   %A_OSType%, varhandle
+menu, var6, add, A_OSVersion:   %A_OSVersion%, varhandle
+menu, var6, add, A_ProgramCommon:   %A_ProgramsCommon%, varhandle
+menu, var6, add, A_ProgramFiles:   %A_ProgramFiles%, varhandle
+menu, var6, add, A_Programs:   %A_Programs%, varhandle
+menu, var6, add, A_PtrSize:   %A_PtrSize%, varhandle
+menu, var6, add, A_ScreenDPI:   %A_ScreenDPI%, varhandle ; causes error
+menu, var6, add, A_ScreenHeight:   %A_ScreenHeight%, varhandle
+menu, var6, add, A_ScreenWidth:   %A_ScreenWidth%, varhandle
+menu, var6, add, A_StartMenu:   %A_StartMenu%, varhandle
+menu, var6, add, A_StartMenuCommon:   %A_StartMenuCommon%, varhandle
+menu, var6, add, A_StartUp:   %A_Startup%, varhandle
+menu, var6, add, A_StartupCommon:   %A_StartupCommon%, varhandle
+menu, var6, add, A_Temp:   %A_Temp%, varhandle
+menu, var6, add, A_UserName:   %A_UserName%, varhandle
+menu, var6, add, A_WinDir:   %A_WinDir%, varhandle
+menu, var, add, Operating System and User Info, :var6
+menu, var, add, ; line -------------------------
+menu, var7, add, A_DefaultGui:   %A_DefaultGui%, varhandle
+menu, var7, add, A_DefaultListView:   %A_DefaultListView%, varhandle
+menu, var7, add, A_DefaultTreeView:   %A_DefaultTreeView%, varhandle
+menu, var7, add, A_EventInfo:   %A_EventInfo%, varhandle
+menu, var7, add, A_GUI:   %A_Gui%, varhandle
+menu, var7, add, A_GuiControl:   %A_GuiControl%, varhandle
+menu, var7, add, A_GuiEvent:   %A_GuiEvent%, varhandle
+menu, var7, add, A_GuiHeight:   %A_GuiHeight%, varhandle
+menu, var7, add, A_GuiWidth:   %A_GuiWidth%, varhandle
+menu, var7, add, A_GuiX:   %A_GuiX%, varhandle
+menu, var7, add, A_GuiY:   %A_GuiY%, varhandle
+Menu, var, add, GUI Windows and Menu Bars, :var7
+menu, var, add, ; line -------------------------
+menu, var, add, Visit Built in Vars Doc Webpage, visitbuiltindocs
+menu, var, icon, Visit Built in Vars Doc Webpage, C:\Windows\system32\netshell.dll, 86
+
+return
+
+varhandle:
+; Retrieve the value of the clicked menu item
+clickedValue := SubStr(A_ThisMenuItem, InStr(A_ThisMenuItem, ":") + 1)
+
+; Check if the value is empty
+if (Trim(clickedValue) = "") {
+    Tooltip, There is nothing here to copy.
+    Sleep 1500
+    Tooltip
+    Return
+}
+
+; Otherwise, copy the value to the clipboard
+Clipboard := ""
+Sleep 20
+Clipboard := Trim(clickedValue)
+Return
+
+visitbuiltindocs:
+run https://www.autohotkey.com/docs/v1/Variables.htm#BuiltIn
+return
 
