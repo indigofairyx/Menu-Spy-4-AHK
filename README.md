@@ -4,7 +4,7 @@
 ### A faster way of copying simple values that you would get from window spy.
 
 Holding down the Hotkey `F4` for .15 secs will get the info of the window **UNDER THE MOUSE** (active or not)
-and then display this menu with the info dynamically in place.
+and then displays this menu with the info dynamically in place.
 
 ![screenshot](https://i.imgur.com/rcpOQnU.png)
 
@@ -48,6 +48,6 @@ forum post: https://www.autohotkey.com/boards/viewtopic.php?f=6&t=135218
 
 ### v.2025.01.30 Update
 
-For the fun of it I've added a sub-menu that populated with the list of A_AHK built in Variable that I quick copied from the docs page.
+For the fun of it I've added a sub-menu thats populated with the list of A_AHK built in Variable that I quickly copied from the AHK Docs page.
 
 ![ahk var menu](https://i.imgur.com/PkoLgvz.png)
