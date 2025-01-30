@@ -34,7 +34,7 @@ Source Info:
 
 Release Date: v.2025.01.08
 
-Last Updated: v.2025.01.16
+Last Updated: v.2025.01.30
 
 Written with AHK v1, Tested OS: Win10
 
@@ -42,3 +42,12 @@ forum post: https://www.autohotkey.com/boards/viewtopic.php?f=6&t=135218
 
 
 ## To Use Download this repo and run the `Menu Spy.ahk` with [AutoHotkey](https://www.autohotkey.com)
+
+
+***
+
+### v.2025.01.30 Update
+
+For the fun of it I've added a sub-menu that populated with the list of A_AHK built in Variable that I quick copied from the docs page.
+
+![ahk var menu](https://i.imgur.com/PkoLgvz.png)
