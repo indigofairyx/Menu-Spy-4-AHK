@@ -30,18 +30,18 @@ Click or tap menu # to place the displayed values on your clipboard, e.g....
 >
 > also Close menu, Reload, Run as Admin and Exit script options
 
-Source Info:
+# Source Info:
 
 Release Date: v.2025.01.08
 
-Last Updated: v.2025.01.30
+Last Updated: v.2025.05.20
 
 Written with AHK v1, Tested OS: Win10
 
 forum post: https://www.autohotkey.com/boards/viewtopic.php?f=6&t=135218
 
 
-## To Use Download this repo and run the `Menu Spy.ahk` with [AutoHotkey](https://www.autohotkey.com)
+# To Use Download this repo and run the `Menu Spy.ahk` with [AutoHotkey v1](https://www.autohotkey.com)
 
 
 ***
@@ -51,3 +51,9 @@ forum post: https://www.autohotkey.com/boards/viewtopic.php?f=6&t=135218
 For the fun of it I've added a sub-menu thats populated with the list of A_AHK built in Variable that I quickly copied from the AHK Docs page.
 
 ![ahk var menu](https://i.imgur.com/PkoLgvz.png)
+
+### v.2025.05.20 Update
+
+Turn off all warnings and Turn on Menu, UseErrorLevel, for those pesky UWP that have that run through icon-less systems hosts which cause menu errors as this menu tries to populate icons from the exe that making a window.
+
+
