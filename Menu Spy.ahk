@@ -6,7 +6,7 @@ About: Menu Spy.ahk
 A faster way of copying simple values that you would get from window spy.
 
 Holding down the hotkey F4 for .15 secs will get the info of the window UNDER THE MOUSE ( active or not)
-and then display this menu with the info dynamically in place.
+and then displays this menu with the info dynamically in place.
 
 Click or tap menu # to place the displayed values on your clipboard, e.g. 	
 
@@ -27,11 +27,11 @@ Click or tap menu # to place the displayed values on your clipboard, e.g.
 -------------------------
 also Close menu, Reload, Run as Admin and Exit script options
 -------------------------
-Made and added a sub menu populated with AHK Built in Variables.
+Made and added a sub menu populated with AHKs Built in Variables.
 
 Source Info:
 Release Date: v.2025.01.08
-Last Updated: v.2025.01.30
+Last Updated: v.2025.05.20
 AHK v1
 OS: Win10
 forum post: https://www.autohotkey.com/boards/viewtopic.php?f=6&t=135218
@@ -57,6 +57,8 @@ SetWorkingDir %A_ScriptDir%
 #InstallMouseHook
 menu, tray, add, ; line -------------------------
 menu, tray, add, About, aboutbox
+menu, Tray, UseErrorLevel, On
+#warn, all, off
 return
 
 $F4:: ;; hold F4 to Open Menu Spy
@@ -94,6 +96,8 @@ return
 ;--------------------------------------------------
 
 menuspy:
+menu, spy, UseErrorLevel, On
+
 gosub varmenu
 MouseGetPos, , , id, control
 WinGetClass, actwin, A
@@ -137,7 +141,7 @@ menu, spy, icon, 4 Win Get Text && All Details, C:\Windows\System32\shell32.dll,
 menu, spy, add, 5 Control Under Mouse=  %control%, copyspy ;;p=7
 menu, spy, icon, 5 Control Under Mouse=  %control%, C:\Windows\System32\accessibilitycpl.dll, 5 ; mouse icon
 menu, spy, add, 6 MouseCoord to Active Window**=  x%xw%`, y%yw%, copyspy ;;p=8
-; menu, spy, icon, 6 MousePos to Window=  x%xw%`, y%yw%, C:\xsysicons\Fluent Colored icons\powertoys icons\Mouse Crosshairs_192x192.ico
+; menu, spy, icon, 6 MousePos to Window=  x%xw%`, y%yw%, X:\xSysIcons\Fluent Colored icons\powertoys icons\Mouse Crosshairs_192x192.ico
 menu, spy, icon, 6 MouseCoord to Active Window**=  x%xw%`, y%yw%, C:\Windows\System32\shell32.dll, 160
 menu, spy, add, 7 .exe Path=  %AppPath%, copyspy ;;p=9
 menu, spy, icon, 7 .exe Path=  %AppPath%, C:\Windows\System32\shell32.dll, 5 ; folder icon
@@ -281,6 +285,7 @@ If !A_IsAdmin {
 Return
 
 varmenu:
+menu, var, UseErrorLevel, On
 menu, var, add
 menu, var, deleteall
 menu, var, add, A_AHKs BUILT IN `%VARIABLES`% MENU, varhandle
